@@ -80,6 +80,7 @@ public class AdministratorController {
 			BindingResult result,
 			Model model
 	) {
+		/// 上の3つの引数と下の3行を追加しました。
 		if (result.hasErrors()) {
 			return "administrator/insert"; // バリデーションエラー時にフォームへ戻す
 		}

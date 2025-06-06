@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
  * @author igamasayuki
  * 
  */
-
+/// 以下のフィールド3つのエラーアノテーションを追加しました。
 public class InsertAdministratorForm {
 	/** 名前 */
 	@NotBlank(message = "名前は必須です")
