@@ -84,6 +84,12 @@ public class AdministratorController {
 		if (result.hasErrors()) {
 			return "administrator/insert"; // バリデーションエラー時にフォームへ戻す
 		}
+
+		if (!form.getPassword().equals(form.getConfirmPassword())) {
+			model.addAttribute("errorMessage", "パスワードと確認用パスワードが一致しません");
+			return "administrator/insert";
+		}
+
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
