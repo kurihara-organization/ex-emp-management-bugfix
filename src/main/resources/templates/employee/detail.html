@@ -84,10 +84,9 @@
 
       <!-- パンくずリスト -->
       <ol class="breadcrumb">
-        <li>従業員リスト</li>
+        <li><a th:href="@{/employee/showList}">従業員リスト</a></li>
         <li class="active">従業員詳細</li>
       </ol>
-
       <!-- register form -->
       <div class="row">
         <div
@@ -132,7 +131,7 @@
                   <tr>
                     <th nowrap>入社日</th>
                     <td>
-                      <span th:utext="${#temporals.format(employee.hireDate, 'yyyy年MM月dd日')}">2012/11/29</span>
+                      <span th:text="${#dates.format(employee.hireDate, 'yyyy年MM月dd日')}">2020年01月01日</span>
                     </td>
                   </tr>
                   <tr>
