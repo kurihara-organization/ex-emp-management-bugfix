@@ -80,18 +80,15 @@ public class AdministratorController {
 			BindingResult result,
 			Model model
 	) {
+		if (form.getMailAddress() != null && !form.getMailAddress().isEmpty()) {
+			if (administratorService.findByMailAddress(form.getMailAddress()) != null) {
+				result.rejectValue("mailAddress", "このメールアドレスは既に登録されています。");
+			}
+		}
 		/// 上の3つの引数と下の3行を追加しました。
 		if (result.hasErrors()) {
 			return "administrator/insert"; // バリデーションエラー時にフォームへ戻す
 		}
-
-		//存在しているメールアドレスのときはエラー文を出す
-		Administrator existingAdmin = administratorService.findByMailAddress(form.getMailAddress());
-		if (existingAdmin != null) {
-			model.addAttribute("errorMessage", "既に使われているメールアドレスです");
-			return "administrator/insert";
-		}
-
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
