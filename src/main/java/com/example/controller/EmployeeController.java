@@ -58,7 +58,7 @@ public class EmployeeController {
 		model.addAttribute("employeeList", employeeList);
 		//ヘッダーの「〇〇さん」
 		String administratorName = (String) session.getAttribute("administratorName");
-		model.addAttribute("administratorName", administratorName);
+		session.setAttribute("administratorName", administratorName);
 		return "employee/list";
 	}
 
@@ -78,7 +78,7 @@ public class EmployeeController {
 		model.addAttribute("employee", employee);
 		//ヘッダーの「〇〇さん」
 		String administratorName = (String) session.getAttribute("administratorName");
-		model.addAttribute("administratorName", administratorName);
+		session.setAttribute("administratorName", administratorName);
 		return "employee/detail";
 	}
 
