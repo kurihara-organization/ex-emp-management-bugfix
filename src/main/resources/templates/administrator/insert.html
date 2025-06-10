@@ -52,6 +52,7 @@
                 <legend>
                   管理者登録<br />(システムにログインできる管理者を登録します)
                 </legend>
+                <p th:if="${errorMessage}" th:text="${errorMessage}" style="color:red"></p>
                 <!-- 氏名 -->
                 <div class="form-group">
                   <div class="row">
@@ -120,6 +121,25 @@
                         th:field="*{password}"
                         th:errorclass="error-input"
                         value="xxxxxxxx"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <label for="confirmPassword">確認用パスワード:</label>
+                      <label th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="error-messages">
+                        確認用パスワードを入力してください
+                      </label>
+                      <input
+                              type="password"
+                              name="confirmPassword"
+                              id="confirmPassword"
+                              class="form-control"
+                              placeholder="確認用パスワード"
+                              th:field="*{confirmPassword}"
+                              th:errorclass="error-input"
                       />
                     </div>
                   </div>
