@@ -56,9 +56,6 @@ public class EmployeeController {
 	public String showList(Model model) {
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
-		//ヘッダーの「〇〇さん」
-		String administratorName = (String) session.getAttribute("administratorName");
-		session.setAttribute("administratorName", administratorName);
 		return "employee/list";
 	}
 
@@ -76,9 +73,6 @@ public class EmployeeController {
 	public String showDetail(String id, Model model) {
 		Employee employee = employeeService.showDetail(Integer.parseInt(id));
 		model.addAttribute("employee", employee);
-		//ヘッダーの「〇〇さん」
-		String administratorName = (String) session.getAttribute("administratorName");
-		session.setAttribute("administratorName", administratorName);
 		return "employee/detail";
 	}
 
