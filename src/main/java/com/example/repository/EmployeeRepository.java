@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,24 @@ public class EmployeeRepository {
 		List<Employee> developmentList = template.query(sql, EMPLOYEE_ROW_MAPPER);
 
 		return developmentList;
+	}
+
+	/**
+	 * keyword曖昧検索された従業員一覧情報を入社日順で取得します.
+	 *
+	 * @param keyword キーワード
+	 * @return 全従業員一覧 従業員が存在しない場合はサイズ0件の従業員一覧を返します
+	 */
+	public List<Employee> findByNameLike(String keyword) {
+		if (keyword == null || keyword.trim().isEmpty()) {
+			return findAll();
+		}
+		String sql = "SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count " +
+				"FROM employees WHERE name LIKE :keyword ORDER BY hire_date DESC";
+		SqlParameterSource param = new MapSqlParameterSource()
+				.addValue("keyword", "%" + keyword + "%");
+		List<Employee> employees = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+		return employees.isEmpty() ? Collections.emptyList() : employees;
 	}
 
 	/**

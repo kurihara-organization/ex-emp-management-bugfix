@@ -88,7 +88,22 @@
           <a href="list.html" th:href="@{/employee/showList}">従業員リスト</a>
         </li>
       </ol>
-
+      <!-- 従業員曖昧検索 -->
+      <form method="get" th:action="@{/employee/showList}" class="form-inline text-center mb-4">
+        <div class="form-group">
+          <input
+                  type="text"
+                  class="form-control"
+                  name="keyword"
+                  th:value="${keyword}"
+                  placeholder="従業員名を入力"
+          />
+          <button type="submit" class="btn btn-primary">検索</button>
+        </div>
+      </form>
+      <div th:if="${message}" class="alert alert-warning text-center" role="alert">
+        <span th:text="${message}">1件もありませんでした</span>
+      </div>
       <!-- table -->
       <div class="row">
         <div
