@@ -77,17 +77,14 @@ public class AdministratorController {
 	@PostMapping("/insert")
 	public String insert(
 			@Valid InsertAdministratorForm form,
-			BindingResult result,
-			Model model
+			BindingResult result
 	) {
+		if (form.getPassword() != null && !form.getPassword().equals(form.getConfirmPassword())) {
+			result.rejectValue("confirmPassword", "password.mismatch", "パスワードと確認用パスワードが一致しません。");
+		}
 		/// 上の3つの引数と下の3行を追加しました。
 		if (result.hasErrors()) {
 			return "administrator/insert"; // バリデーションエラー時にフォームへ戻す
-		}
-
-		if (!form.getPassword().equals(form.getConfirmPassword())) {
-			model.addAttribute("errorMessage", "パスワードと確認用パスワードが一致しません");
-			return "administrator/insert";
 		}
 
 		Administrator administrator = new Administrator();
