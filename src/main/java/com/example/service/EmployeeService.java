@@ -23,6 +23,16 @@ public class EmployeeService {
 	private EmployeeRepository employeeRepository;
 
 	/**
+	 * keyword曖昧検索された従業員一覧情報を入社日順で取得します.
+	 *
+	 * @param keyword キーワード
+	 * @return 全従業員一覧 従業員が存在しない場合はサイズ0件の従業員一覧を返します
+	 */
+	public List<Employee> searchByName(String keyword) {
+		return employeeRepository.findByNameLike(keyword);
+	}
+
+	/**
 	 * 従業員情報を全件取得します.
 	 * 
 	 * @return 従業員情報一覧

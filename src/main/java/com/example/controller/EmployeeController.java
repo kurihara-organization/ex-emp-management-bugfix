@@ -2,8 +2,7 @@ package com.example.controller;
 
 import java.util.List;
 
-import com.example.form.InsertAdministratorForm;
-import jakarta.servlet.http.HttpSession;
+import com.example.form.SearchByNameForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +29,6 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
-	@Autowired
-	private HttpSession session;
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -53,8 +50,15 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@GetMapping("/showList")
-	public String showList(Model model) {
-		List<Employee> employeeList = employeeService.showList();
+	public String showList(Model model, SearchByNameForm form) {
+		String keyword = form.getKeyword();
+		List<Employee> employeeList = employeeService.searchByName(keyword);
+
+		if ((keyword != null && !keyword.isEmpty()) && employeeList.isEmpty()) {
+			model.addAttribute("message", "1件もありませんでした");
+			employeeList = employeeService.showList(); // 全件再取得
+		}
+
 		model.addAttribute("employeeList", employeeList);
 		return "employee/list";
 	}
