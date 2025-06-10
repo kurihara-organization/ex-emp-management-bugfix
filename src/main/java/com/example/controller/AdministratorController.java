@@ -82,7 +82,7 @@ public class AdministratorController {
 	) {
 		if (form.getMailAddress() != null && !form.getMailAddress().isEmpty()) {
 			if (administratorService.findByMailAddress(form.getMailAddress()) != null) {
-				result.rejectValue("mailAddress", "このメールアドレスは既に登録されています。");
+				result.rejectValue("mailAddress", "error.duplicateMailAddress", "このメールアドレスは既に登録されています。");
 			}
 		}
 		/// 上の3つの引数と下の3行を追加しました。
