@@ -2,6 +2,8 @@ package com.example.controller;
 
 import java.util.List;
 
+import com.example.form.InsertAdministratorForm;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,8 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	private HttpSession session;
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -52,6 +56,9 @@ public class EmployeeController {
 	public String showList(Model model) {
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
+		//ヘッダーの「〇〇さん」
+		String administratorName = (String) session.getAttribute("administratorName");
+		model.addAttribute("administratorName", administratorName);
 		return "employee/list";
 	}
 
@@ -69,6 +76,9 @@ public class EmployeeController {
 	public String showDetail(String id, Model model) {
 		Employee employee = employeeService.showDetail(Integer.parseInt(id));
 		model.addAttribute("employee", employee);
+		//ヘッダーの「〇〇さん」
+		String administratorName = (String) session.getAttribute("administratorName");
+		model.addAttribute("administratorName", administratorName);
 		return "employee/detail";
 	}
 

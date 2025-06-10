@@ -132,7 +132,7 @@
                   <tr>
                     <th nowrap>入社日</th>
                     <td>
-                      <span th:utext="${#temporals.format(employee.hireDate, 'yyyy年MM月dd日')}">2012/11/29</span>
+                      <span th:text="${#dates.format(employee.hireDate, 'yyyy年MM月dd日')}">2020年01月01日</span>
                     </td>
                   </tr>
                   <tr>
