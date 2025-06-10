@@ -79,9 +79,15 @@ public class AdministratorController {
 			@Valid InsertAdministratorForm form,
 			BindingResult result
 	) {
+    
 		if (!form.getPassword().equals(form.getConfirmPassword())) {
 			result.rejectValue("confirmPassword", "password.mismatch", "パスワードと確認用パスワードが一致しません。");
+    }
+    
+		if (administratorService.findByMailAddress(form.getMailAddress()) != null) {
+			result.rejectValue("mailAddress", "error.duplicateMailAddress", "このメールアドレスは既に登録されています。");
 		}
+    
 		/// 上の3つの引数と下の3行を追加しました。
 		if (result.hasErrors()) {
 			return "administrator/insert"; // バリデーションエラー時にフォームへ戻す
