@@ -80,10 +80,8 @@ public class AdministratorController {
 			BindingResult result,
 			Model model
 	) {
-		if (form.getMailAddress() != null && !form.getMailAddress().isEmpty()) {
-			if (administratorService.findByMailAddress(form.getMailAddress()) != null) {
-				result.rejectValue("mailAddress", "error.duplicateMailAddress", "このメールアドレスは既に登録されています。");
-			}
+		if (administratorService.findByMailAddress(form.getMailAddress()) != null) {
+			result.rejectValue("mailAddress", "error.duplicateMailAddress", "このメールアドレスは既に登録されています。");
 		}
 		/// 上の3つの引数と下の3行を追加しました。
 		if (result.hasErrors()) {
