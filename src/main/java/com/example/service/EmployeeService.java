@@ -1,5 +1,6 @@
 package com.example.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,22 @@ public class EmployeeService {
 	public List<Employee> showList() {
 		List<Employee> employeeList = employeeRepository.findAll();
 		return employeeList;
+	}
+
+	public List<String> showAllEmployeeNames() {
+		List<Employee> employees = employeeRepository.findAll();
+		List<String> employeeNamesList = new ArrayList<>();
+
+		for (Employee employee : employees) {
+			employeeNamesList.add(employee.getName());
+		}
+///		//メモ:StreamAPIバージョン
+//		List<Employee> employeeList = employeeRepository.findAll();
+//		List<String> employeeNamesList = employeeList.stream()// Stream<Employee>
+//				.map(emp -> emp.getName())// Stream<String>
+//				.collect(Collectors.toList());// List<String>
+
+		return employeeNamesList;
 	}
 
 	/**
