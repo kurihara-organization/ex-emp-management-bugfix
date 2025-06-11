@@ -50,7 +50,7 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@GetMapping("/showList")
-	public String showList(Model model, SearchByNameForm form) {
+	public String showList(Model model, SearchByNameForm form, String pageId) {
 		String keyword = form.getKeyword();
 		List<Employee> employeeList = employeeService.searchByName(keyword);
 
@@ -63,6 +63,37 @@ public class EmployeeController {
 		model.addAttribute("employeeList", employeeList);
 		model.addAttribute("nameCandidates", nameCandidates);
 		model.addAttribute("keyword", keyword);
+
+		//ページネーション
+		if (pageId == null){
+			pageId = "1";
+		}
+		int currentPage = Integer.parseInt(pageId);
+		final int PAGE_SIZE = 10;
+		int totalItems = employeeList.size();
+		int totalPages = (int) Math.ceil((double) totalItems / PAGE_SIZE);
+
+		//現在のページに表示する従業員リストを切り出す
+		List<Employee> pagedEmployeeList;
+		if (totalItems > 0) {
+			int fromIndex = (currentPage - 1) * PAGE_SIZE;//ex:10, 20, 30
+			//ex: toIndex = Math.min(20 + 10, 25) → 25 (ラストページ)
+			int toIndex = Math.min(fromIndex + PAGE_SIZE, totalItems);
+			//切り出し [A,B,C,D,E].subList(1,4) → [B,C,D]
+			pagedEmployeeList = employeeList.subList(fromIndex, toIndex);
+		} else {
+			pagedEmployeeList = employeeList; // 0件の場合はそのまま空のリストを渡す
+		}
+
+		// ③ 前後のページが存在するかを判定
+		boolean hasBackPage = currentPage > 1;
+		boolean hasNextPage = currentPage < totalPages;
+
+		model.addAttribute("employeeList", pagedEmployeeList); // ページングされたリストを渡す
+		model.addAttribute("pageId", currentPage); // HTMLでの計算用に現在のページ番号を渡す
+		model.addAttribute("currentPage", currentPage); // 表示用に現在のページ番号を渡す
+		model.addAttribute("hasBackPage", hasBackPage);
+		model.addAttribute("hasNextPage", hasNextPage);
 		return "employee/list";
 	}
 
