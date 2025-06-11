@@ -59,7 +59,10 @@ public class EmployeeController {
 			employeeList = employeeService.showList(); // 全件再取得
 		}
 
+		List<String> nameCandidates = employeeService.showAllEmployeeNames();
 		model.addAttribute("employeeList", employeeList);
+		model.addAttribute("nameCandidates", nameCandidates);
+		model.addAttribute("keyword", keyword);
 		return "employee/list";
 	}
 

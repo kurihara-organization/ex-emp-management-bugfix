@@ -97,7 +97,11 @@
                   name="keyword"
                   th:value="${keyword}"
                   placeholder="従業員名を入力"
-          />
+                  list="nameList"
+           />
+          <datalist id="nameList"> <!-- 🔽 候補一覧 -->
+            <option th:each="name : ${nameCandidates}" th:text="${name}" />
+          </datalist>
           <button type="submit" class="btn btn-primary">検索</button>
         </div>
       </form>
