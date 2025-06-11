@@ -62,6 +62,7 @@ public class EmployeeController {
 		List<String> nameCandidates = employeeService.showAllEmployeeNames();
 		model.addAttribute("employeeList", employeeList);
 		model.addAttribute("nameCandidates", nameCandidates);
+		model.addAttribute("keyword", keyword);
 		return "employee/list";
 	}
 
