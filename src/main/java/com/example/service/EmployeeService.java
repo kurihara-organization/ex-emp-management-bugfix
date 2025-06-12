@@ -79,4 +79,17 @@ public class EmployeeService {
 	public void update(Employee employee) {
 		employeeRepository.update(employee);
 	}
+
+	/**
+	 * 従業員情報を登録します.
+	 * IDは max(id)+1 を使用し、同時登録を避けるため synchronized を使用します。
+	 *
+	 * @param employee 登録する従業員
+	 */
+	public synchronized void registerEmployee(Employee employee) {
+		Integer maxId = employeeRepository.findMaxId();
+		int newId = (maxId == null ? 1 : maxId + 1);
+		employee.setId(newId);
+		employeeRepository.insert(employee);
+	}
 }

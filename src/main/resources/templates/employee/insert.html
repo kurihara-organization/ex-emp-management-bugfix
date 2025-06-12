@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>従業員登録</title>
+</head>
+<body>
+<h1>従業員登録フォーム</h1>
+<form th:action="@{/employee/insert}" method="post" enctype="multipart/form-data" th:object="${insertEmployeeForm}">
+  <div>
+    <label>名前：</label>
+    <input type="text" th:field="*{name}" />
+    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>画像（.jpg / .png）：</label>
+    <input type="file" th:field="*{imageFile}" accept=".jpg,.png" />
+    <div th:if="${#fields.hasErrors('imageFile')}" th:errors="*{imageFile}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>性別：</label>
+    <input type="radio" th:field="*{gender}" value="男性" /> 男性
+    <input type="radio" th:field="*{gender}" value="女性" /> 女性
+    <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>入社日：</label>
+    <input type="date" th:field="*{hireDate}" />
+    <div th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>メールアドレス：</label>
+    <input type="email" th:field="*{mailAddress}" />
+    <div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>郵便番号：</label>
+    <input type="text" th:field="*{zipCode}" maxlength="8" onKeyUp="searchAddressByZipCode(this.value)" />
+    <div th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>住所：</label>
+    <input type="text" th:field="*{address}" />
+    <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>電話番号：</label>
+    <input type="text" th:field="*{telephone}" />
+    <div th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>給料：</label>
+    <input type="number" th:field="*{salary}" />
+    <div th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>特性：</label>
+    <textarea th:field="*{characteristics}"></textarea>
+    <div th:if="${#fields.hasErrors('characteristics')}" th:errors="*{characteristics}" style="color:red"></div>
+  </div>
+
+  <div>
+    <label>扶養人数：</label>
+    <input type="number" th:field="*{dependentsCount}" />
+    <div th:if="${#fields.hasErrors('dependentsCount')}" th:errors="*{dependentsCount}" style="color:red"></div>
+  </div>
+
+  <div>
+    <button type="submit">登録</button>
+  </div>
+</form>
+<!-- 郵便番号から住所自動取得 -->
+<script>
+  function searchAddressByZipCode(zipCode) {
+      if (zipCode.length === 7 || zipCode.length === 8) {
+          fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipCode}`)
+              .then(response => response.json())
+              .then(data => {
+                  if (data.results) {
+                      const address = data.results[0].address1 + data.results[0].address2 + data.results[0].address3;
+                      document.querySelector('input[name="address"]').value = address;
+                  }
+              })
+              .catch(error => console.log("郵便番号APIエラー:", error));
+      }
+  }
+</script>
+</body>
+</html>
