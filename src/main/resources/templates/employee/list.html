@@ -90,23 +90,32 @@
         </li>
       </ol>
       <!-- 従業員曖昧検索 -->
-      <form method="get" th:action="@{/employee/showList}" class="form-inline text-center mb-4">
+      <form
+        method="get"
+        th:action="@{/employee/showList}"
+        class="form-inline text-center mb-4"
+      >
         <div class="form-group">
           <input
-                  type="text"
-                  class="form-control"
-                  name="keyword"
-                  th:value="${keyword}"
-                  placeholder="従業員名を入力"
-                  list="nameList"
-           />
-          <datalist id="nameList"> <!-- 🔽 候補一覧 -->
+            type="text"
+            class="form-control"
+            name="keyword"
+            th:value="${keyword}"
+            placeholder="従業員名を入力"
+            list="nameList"
+          />
+          <datalist id="nameList">
+            <!-- 🔽 候補一覧 -->
             <option th:each="name : ${nameCandidates}" th:text="${name}" />
           </datalist>
           <button type="submit" class="btn btn-primary">検索</button>
         </div>
       </form>
-      <div th:if="${message}" class="alert alert-warning text-center" role="alert">
+      <div
+        th:if="${message}"
+        class="alert alert-warning text-center"
+        role="alert"
+      >
         <span th:text="${message}">1件もありませんでした</span>
       </div>
       <!-- table -->
@@ -137,7 +146,10 @@
                   </a>
                 </td>
                 <td>
-                  <span th:text="${#dates.format(employee.hireDate, 'yyyy年MM月dd日')}">2020年01月01日</span>
+                  <span
+                    th:text="${#dates.format(employee.hireDate, 'yyyy年MM月dd日')}"
+                    >2020年01月01日</span
+                  >
                 </td>
                 <td>
                   <span th:text="${employee.dependentsCount} + '人'">3人</span>
@@ -145,7 +157,37 @@
               </tr>
             </tbody>
           </table>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 300px;
+              margin: 20px auto;
+            "
+          >
+            <div style="flex: 1; text-align: left">
+              <a
+                th:if="${hasBackPage}"
+                th:href="@{/employee/showList(pageId=${pageId - 1}, keyword=${keyword})}"
+              >
+                前へ
+              </a>
+            </div>
 
+            <div style="flex: 1; text-align: center">
+              <span th:text="${currentPage}"></span><span>ページ目</span>
+            </div>
+
+            <div style="flex: 1; text-align: right">
+              <a
+                th:if="${hasNextPage}"
+                th:href="@{/employee/showList(pageId=${pageId + 1}, keyword=${keyword})}"
+              >
+                次へ
+              </a>
+            </div>
+          </div>
           <!-- ここから下を編集する必要はありません -->
         </div>
       </div>
