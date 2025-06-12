@@ -1,9 +1,15 @@
 package com.example.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import com.example.form.InsertEmployeeForm;
 import com.example.form.SearchByNameForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.domain.Employee;
 import com.example.form.UpdateEmployeeForm;
 import com.example.service.EmployeeService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 従業員情報を操作するコントローラー.
@@ -101,6 +108,63 @@ public class EmployeeController {
 		employee.setId(form.getIntId());
 		employee.setDependentsCount(form.getIntDependentsCount());
 		employeeService.update(employee);
+		return "redirect:/employee/showList";
+	}
+
+	@GetMapping("/to-insert")
+	public String toInsert(Model model) {
+		model.addAttribute("insertEmployeeForm", new InsertEmployeeForm());
+		return "employee/insert";
+	}
+
+	@PostMapping("/insert")
+	public String insert(
+			@Validated InsertEmployeeForm form
+			, BindingResult result
+			, Model model){
+		if(result.hasErrors()){
+			return "employee/insert";
+		}
+
+		// 画像ファイルの保存処理
+		MultipartFile imageFile = form.getImageFile();
+		String imageName = null;
+		if (imageFile != null && !imageFile.isEmpty()) {
+			try {
+				String originalFilename = imageFile.getOriginalFilename();
+				if (originalFilename != null && (originalFilename.endsWith(".jpg") || originalFilename.endsWith(".png"))) {
+					imageName = originalFilename;
+					Path imagePath = Paths.get("src/main/resources/static/img/" + imageName);
+					Files.write(imagePath, imageFile.getBytes());
+				} else {
+					result.rejectValue("imageFile", null, "画像はjpgまたはpng形式でアップロードしてください");
+					return "employee/insert";
+				}
+			} catch (IOException e) {
+				result.rejectValue("imageFile", null, "画像ファイルの保存に失敗しました");
+				return "employee/insert";
+			}
+		}
+		//System.out.println(form);
+		System.out.println(imageName);
+		// フォーム → ドメイン変換
+		Employee employee = new Employee();
+		employee.setName(form.getName());
+		employee.setImage(imageName);
+		//employee.setImage("スクリーンショット 2025-05-28 153224.png");
+		employee.setGender(form.getGender());
+		employee.setHireDate(form.getHireDate());
+		employee.setMailAddress(form.getMailAddress());
+		employee.setZipCode(form.getZipCode());
+		employee.setAddress(form.getAddress());
+		employee.setTelephone(form.getTelephone());
+		employee.setSalary(form.getSalary());
+		employee.setCharacteristics(form.getCharacteristics());
+		employee.setDependentsCount(form.getDependentsCount());
+		System.out.println(employee);
+		// サービス経由で登録
+		employeeService.registerEmployee(employee);
+
 		return "redirect:/employee/showList";
 	}
 }
